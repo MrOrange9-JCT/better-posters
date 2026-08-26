@@ -8,7 +8,7 @@
 [![Pipeline](https://img.shields.io/github/actions/workflow/status/neurekadev/better-posters/CI.yml?branch=master&style=flat-square&logo=githubactions&logoColor=8B5CF6&label=Pipeline&color=8B5CF6)](https://github.com/neurekadev/better-posters/actions/workflows/CI.yml)
 [![License](https://img.shields.io/github/license/neurekadev/better-posters?style=flat-square&label=License&color=14B8A6&logo=opensourceinitiative&logoColor=14B8A6)](./LICENSE.md)
 [![AI](https://img.shields.io/badge/AI-assisted-5786FE?style=flat-square&logo=deepseek&logoColor=5786FE)](https://github.com/neurekadev/better-posters)
-[![Stars](https://img.shields.io/github/stars/neurekadev/better-posters?style=flat-square&label=Stars&color=EAB308&logo=googlegemini&logoColor=EAB308)](https://github.com/neurekadev/better-posters/stargazers)
+[![Stars](https://img.shields.io/github/stars/neurekadev/better-posters?style=flat-square&label=Stars&color=EAB308&logo=googlegemini&logoColor=EAB308)](https://github.com/neurekadev/better-posters)
 
 **Better Posters** is an unofficial Jellyfin plugin that lets you replace standard movie and show posters with customizable posters from [btttr.cc](https://btttr.cc).
 
