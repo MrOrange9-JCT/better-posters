@@ -76,6 +76,11 @@ jobs:
             exit 1
           fi
 
+          if ! git rev-parse --verify --quiet "refs/tags/$VERSION^{commit}" >/dev/null; then
+            echo "Release tag does not exist: $VERSION" >&2
+            exit 1
+          fi
+
           plugin_version="$(sed -nE 's/^version: *"([^"]+)"/\1/p' build.yaml)"
           if [[ "$plugin_version" != "$VERSION.0" ]]; then
             echo "build.yaml version $plugin_version does not match tag $VERSION" >&2
@@ -119,47 +124,157 @@ jobs:
           echo "name=$(basename "$package")" >> "$GITHUB_OUTPUT"
 
       - name: Publish GitHub Release
+        id: release
+        uses: actions/github-script@v9
         env:
-          GH_TOKEN: ${{ github.token }}
+          PACKAGE_NAME: ${{ steps.package.outputs.name }}
+          PACKAGE_PATH: ${{ steps.package.outputs.path }}
+          RELEASE_NOTES_PATH: ${{ runner.temp }}/release-notes.md
+        with:
+          retries: 3
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const { owner, repo } = context.repo;
+            const version = process.env.VERSION;
+            const notes = fs.readFileSync(process.env.RELEASE_NOTES_PATH, 'utf8');
+            const packagePaths = [
+              process.env.PACKAGE_PATH,
+              `${process.env.PACKAGE_PATH}.md5sum`,
+              `${process.env.PACKAGE_PATH}.sha256sum`,
+            ];
+
+            const releases = await github.paginate(github.rest.repos.listReleases, {
+              owner,
+              repo,
+              per_page: 100,
+            });
+            let release = releases.find((candidate) => candidate.tag_name === version);
+
+            if (!release) {
+              const response = await github.rest.repos.createRelease({
+                owner,
+                repo,
+                tag_name: version,
+                name: version,
+                body: notes,
+                draft: true,
+                prerelease: false,
+              });
+              release = response.data;
+            } else if (release.draft) {
+              const response = await github.rest.repos.updateRelease({
+                owner,
+                repo,
+                release_id: release.id,
+                name: version,
+                body: notes,
+                draft: true,
+                prerelease: false,
+              });
+              release = response.data;
+            }
+
+            if (release.draft) {
+              const existingAssets = await github.paginate(
+                github.rest.repos.listReleaseAssets,
+                {
+                  owner,
+                  repo,
+                  release_id: release.id,
+                  per_page: 100,
+                },
+              );
+
+              for (const packagePath of packagePaths) {
+                const name = path.basename(packagePath);
+                const existing = existingAssets.find((asset) => asset.name === name);
+                if (existing) {
+                  await github.rest.repos.deleteReleaseAsset({
+                    owner,
+                    repo,
+                    asset_id: existing.id,
+                  });
+                }
+
+                const data = fs.readFileSync(packagePath);
+                await github.rest.repos.uploadReleaseAsset({
+                  owner,
+                  repo,
+                  release_id: release.id,
+                  name,
+                  data,
+                  headers: {
+                    'content-type': name.endsWith('.zip')
+                      ? 'application/zip'
+                      : 'text/plain',
+                    'content-length': data.length,
+                  },
+                });
+              }
+
+              const tags = await github.paginate(github.rest.repos.listTags, {
+                owner,
+                repo,
+                per_page: 100,
+              });
+              const versions = tags
+                .map((tag) => tag.name)
+                .filter((tag) => /^\d+\.\d+\.\d+$/.test(tag))
+                .sort((left, right) => {
+                  const leftParts = left.split('.').map(Number);
+                  const rightParts = right.split('.').map(Number);
+                  for (let index = 0; index < 3; index += 1) {
+                    if (leftParts[index] !== rightParts[index]) {
+                      return leftParts[index] - rightParts[index];
+                    }
+                  }
+                  return 0;
+                });
+
+              const response = await github.rest.repos.updateRelease({
+                owner,
+                repo,
+                release_id: release.id,
+                name: version,
+                body: notes,
+                draft: false,
+                prerelease: false,
+                make_latest: version === versions.at(-1) ? 'true' : 'false',
+              });
+              release = response.data;
+            } else {
+              core.notice(`Release ${version} is already published; preserving its assets.`);
+            }
+
+            const response = await github.rest.repos.getRelease({
+              owner,
+              repo,
+              release_id: release.id,
+            });
+            release = response.data;
+
+            if (release.draft) {
+              throw new Error(`Release ${version} was not published.`);
+            }
+
+            const expectedAssets = packagePaths.map((packagePath) => path.basename(packagePath));
+            for (const name of expectedAssets) {
+              const asset = release.assets.find((candidate) => candidate.name === name);
+              if (!asset || asset.state !== 'uploaded') {
+                throw new Error(`Release asset ${name} is not uploaded.`);
+              }
+            }
+
+            core.setOutput('release-id', release.id);
+
+      - name: Verify published GitHub Release
+        env:
           PACKAGE_NAME: ${{ steps.package.outputs.name }}
           PACKAGE_PATH: ${{ steps.package.outputs.path }}
         shell: bash
         run: |
           set -euo pipefail
-
-          if gh release view "$VERSION" >/dev/null 2>&1; then
-            if [[ "$(gh release view "$VERSION" --json isDraft --jq '.isDraft')" == "true" ]]; then
-              gh release edit "$VERSION" \
-                --title "$VERSION" \
-                --notes-file "$RUNNER_TEMP/release-notes.md" \
-                --prerelease=false
-              gh release upload "$VERSION" \
-                "$PACKAGE_PATH" \
-                "$PACKAGE_PATH.md5sum" \
-                "$PACKAGE_PATH.sha256sum" \
-                --clobber
-            else
-              echo "Release $VERSION is already published; preserving its assets."
-            fi
-          else
-            gh release create "$VERSION" \
-              "$PACKAGE_PATH" \
-              "$PACKAGE_PATH.md5sum" \
-              "$PACKAGE_PATH.sha256sum" \
-              --draft \
-              --verify-tag \
-              --title "$VERSION" \
-              --notes-file "$RUNNER_TEMP/release-notes.md"
-          fi
-
-          if [[ "$(gh release view "$VERSION" --json isDraft --jq '.isDraft')" == "true" ]]; then
-            gh release edit "$VERSION" --draft=false --prerelease=false
-          fi
-
-          if [[ "$(gh release view "$VERSION" --json isDraft --jq '.isDraft')" != "false" ]]; then
-            echo "Release $VERSION was not published." >&2
-            exit 1
-          fi
 
           latest_version="$(
             git tag --list |
