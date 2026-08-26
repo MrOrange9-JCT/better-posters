@@ -4,26 +4,23 @@
 
 # Better Posters
 
-[![Release](https://img.shields.io/badge/dynamic/json.svg?style=flat-square&logo=git&logoColor=F43F5E&label=Release&color=F43F5E&url=https://code.neureka.dev/api/v4/projects/2/releases&query=$[0].tag_name)](https://code.neureka.dev/jellyfin/plugins/better-posters/-/releases)
-[![Pipeline](https://img.shields.io/badge/dynamic/json?style=flat-square&logo=gitlab&logoColor=8B5CF6&label=Pipeline&color=8B5CF6&url=https://code.neureka.dev/api/v4/projects/2/pipelines&query=$[0].status)](https://code.neureka.dev/jellyfin/plugins/better-posters/-/pipelines)
-[![License](https://img.shields.io/github/license/NeurekaSoftware/Better-Posters?style=flat-square&label=License&color=14B8A6&logo=opensourceinitiative&logoColor=14B8A6)](./LICENSE.md)
-[![AI](https://img.shields.io/badge/AI-assisted-5786FE?style=flat-square&logo=deepseek&logoColor=5786FE)](https://code.neureka.dev/jellyfin/plugins/better-posters)
-[![Stars](https://img.shields.io/github/stars/NeurekaSoftware/Better-Posters?style=flat-square&label=Stars&color=EAB308&logo=googlegemini&logoColor=EAB308)](https://code.neureka.dev/jellyfin/plugins/better-posters)
+[![Release](https://img.shields.io/github/v/release/neurekadev/better-posters?style=flat-square&logo=github&logoColor=F43F5E&label=Release&color=F43F5E)](https://github.com/neurekadev/better-posters/releases/latest)
+[![Pipeline](https://img.shields.io/github/actions/workflow/status/neurekadev/better-posters/CI.yml?branch=master&style=flat-square&logo=githubactions&logoColor=8B5CF6&label=Pipeline&color=8B5CF6)](https://github.com/neurekadev/better-posters/actions/workflows/CI.yml)
+[![License](https://img.shields.io/github/license/neurekadev/better-posters?style=flat-square&label=License&color=14B8A6&logo=opensourceinitiative&logoColor=14B8A6)](./LICENSE.md)
+[![AI](https://img.shields.io/badge/AI-assisted-5786FE?style=flat-square&logo=deepseek&logoColor=5786FE)](https://github.com/neurekadev/better-posters)
+[![Stars](https://img.shields.io/github/stars/neurekadev/better-posters?style=flat-square&label=Stars&color=EAB308&logo=googlegemini&logoColor=EAB308)](https://github.com/neurekadev/better-posters/stargazers)
 
 **Better Posters** is an unofficial Jellyfin plugin that lets you replace standard movie and show posters with customizable posters from [btttr.cc](https://btttr.cc).
 
 </div>
 
 > [!WARNING]
-> **We've moved — please reinstall Better Posters (migrated 2026-07-10).**
-> Better Posters is now hosted on a new server, so Jellyfin can no longer reach its old plugin repository and will not receive updates. If you installed it before this date, please reinstall it:
+> **We've moved to GitHub — please reinstall Better Posters (migrated 2026-08-25).**
+> Better Posters is now officially hosted on GitHub. If you installed it from the former GitLab plugin repository, replace that repository and reinstall the plugin:
 >
-> 1. In Jellyfin, open **Dashboard -> Plugins -> Repositories** and remove the old **Better Posters** repository.
-> 2. Add the new repository URL: `https://code.neureka.dev/jellyfin/plugins/better-posters/-/raw/master/manifest.json`
+> 1. In Jellyfin, open **Dashboard -> Plugins -> Repositories** and remove the old **Better Posters** repository that uses `code.neureka.dev`.
+> 2. Add the new repository URL: `https://raw.githubusercontent.com/neurekadev/better-posters/master/manifest.json`
 > 3. Reinstall **Better Posters** from **Dashboard -> Plugins -> Catalog**, then restart Jellyfin.
-
-> [!IMPORTANT]  
-> This repository's GitHub mirror is for reference only. Please submit bug reports and feature requests to our [official GitLab repository](https://code.neureka.dev/jellyfin/plugins/better-posters).
 
 **Minimum Jellyfin version:** 10.11.10
 
@@ -43,7 +40,7 @@
 2. Add this repository URL:
 
     ```text
-    https://code.neureka.dev/jellyfin/plugins/better-posters/-/raw/master/manifest.json
+    https://raw.githubusercontent.com/neurekadev/better-posters/master/manifest.json
     ```
 
 3. Open **Dashboard -> Plugins -> Catalog**.
@@ -53,7 +50,7 @@
 
 ### Option 2: Install Manually from a Release
 
-1. Download the latest `better-posters_*.zip` asset from the [GitLab releases page](https://code.neureka.dev/jellyfin/plugins/better-posters/-/releases).
+1. Download the latest `better-posters_*.zip` asset from the [GitHub releases page](https://github.com/neurekadev/better-posters/releases/latest).
 2. Stop Jellyfin.
 3. Create a Better Posters plugin folder under your Jellyfin plugins directory.
 4. Extract the release zip into that folder.

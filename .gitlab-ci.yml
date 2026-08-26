@@ -1,7 +1,0 @@
-# Build, test, and release this Jellyfin plugin via the shared component.
-stages: [test, release]
-
-include:
-  - component: $CI_SERVER_FQDN/components/jellyfin-plugin/release@1.0.1
-    inputs:
-      solution: BetterPosters.sln
