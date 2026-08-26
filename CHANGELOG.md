@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.5] - 2026-08-25
+
+### Changed
+- Move Better Posters updates to the official GitHub project; replace the old Jellyfin update source and reinstall the plugin to keep receiving releases.
+
 ## [1.0.4] - 2026-07-10
 
 ### Changed
@@ -38,3 +43,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add Better Posters as a Jellyfin image provider for movie and show posters from btttr.cc.
+
+[Unreleased]: https://github.com/neurekadev/better-posters/compare/1.0.5...HEAD
+[1.0.5]: https://github.com/neurekadev/better-posters/compare/1.0.4...1.0.5
+[1.0.4]: https://github.com/neurekadev/better-posters/compare/1.0.3...1.0.4
+[1.0.3]: https://github.com/neurekadev/better-posters/compare/1.0.2...1.0.3
+[1.0.2]: https://github.com/neurekadev/better-posters/compare/1.0.1...1.0.2
+[1.0.1]: https://github.com/neurekadev/better-posters/compare/1.0.0...1.0.1
+[1.0.0]: https://github.com/neurekadev/better-posters/tree/1.0.0
