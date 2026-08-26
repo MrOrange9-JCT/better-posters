@@ -13,8 +13,8 @@
                 "changelog": "### Changed\n- Move Better Posters updates to the official GitHub project; replace the old Jellyfin update source and reinstall the plugin to keep receiving releases.\n",
                 "targetAbi": "10.11.10.0",
                 "sourceUrl": "https://github.com/neurekadev/better-posters/releases/download/1.0.5/better-posters_1.0.5.0.zip",
-                "checksum": "aee5549501acf7eadb7342e7b399bab5",
-                "timestamp": "2026-08-26T03:41:05Z"
+                "checksum": "108e2708e2911a5992c816266e7da98c",
+                "timestamp": "2026-08-26T04:01:50Z"
             },
             {
                 "version": "1.0.4.0",
