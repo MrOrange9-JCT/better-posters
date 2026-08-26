@@ -10,6 +10,11 @@ on:
     branches:
       - master
   workflow_dispatch:
+    inputs:
+      release_version:
+        description: Existing bare SemVer tag to publish or recover
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -32,7 +37,7 @@ jobs:
 
   release:
     name: Release
-    if: github.ref_type == 'tag'
+    if: github.ref_type == 'tag' || inputs.release_version != ''
     needs: test
     runs-on: ubuntu-latest
     concurrency:
@@ -41,7 +46,7 @@ jobs:
     permissions:
       contents: write
     env:
-      VERSION: ${{ github.ref_name }}
+      VERSION: ${{ inputs.release_version || github.ref_name }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -78,8 +83,8 @@ jobs:
           fi
 
           awk -v version="$VERSION" '
-            $0 ~ ("^## \\[" version "\\]") { found = 1; next }
-            /^## \\[/ { found = 0 }
+            index($0, "## [" version "]") == 1 { found = 1; next }
+            index($0, "## [") == 1 { found = 0 }
             found { print }
           ' CHANGELOG.md > "$RUNNER_TEMP/release-notes.md"
 
