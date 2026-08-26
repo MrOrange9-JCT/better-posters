@@ -161,6 +161,16 @@ jobs:
             exit 1
           fi
 
+          latest_version="$(
+            git tag --list |
+              awk '/^[0-9]+\.[0-9]+\.[0-9]+$/ { print }' |
+              sort --version-sort |
+              tail --lines 1
+          )"
+          if [[ "$VERSION" == "$latest_version" ]]; then
+            gh release edit "$VERSION" --latest
+          fi
+
           release_url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}"
           published_package="$RUNNER_TEMP/$PACKAGE_NAME"
           published_md5="$RUNNER_TEMP/$PACKAGE_NAME.md5sum"
@@ -172,6 +182,17 @@ jobs:
 
           expected_md5="$(awk '{ print $1; exit }' "$published_md5")"
           echo "$expected_md5  $published_package" | md5sum --check --strict -
+
+          if [[ "$VERSION" == "$latest_version" ]]; then
+            latest_release="$RUNNER_TEMP/latest-release.json"
+            curl --fail --location --retry 6 --retry-all-errors --retry-delay 2 \
+              --output "$latest_release" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest"
+            if [[ "$(jq --raw-output '.tag_name' "$latest_release")" != "$VERSION" ]]; then
+              echo "Release $VERSION is not the public latest release." >&2
+              exit 1
+            fi
+          fi
 
       - name: Update plugin manifest
         env:
