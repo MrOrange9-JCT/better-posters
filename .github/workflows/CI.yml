@@ -121,31 +121,57 @@ jobs:
       - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
+          PACKAGE_NAME: ${{ steps.package.outputs.name }}
           PACKAGE_PATH: ${{ steps.package.outputs.path }}
         shell: bash
         run: |
           set -euo pipefail
 
           if gh release view "$VERSION" >/dev/null 2>&1; then
-            gh release edit "$VERSION" \
-              --title "$VERSION" \
-              --notes-file "$RUNNER_TEMP/release-notes.md" \
-              --draft=false \
-              --prerelease=false
-            gh release upload "$VERSION" \
-              "$PACKAGE_PATH" \
-              "$PACKAGE_PATH.md5sum" \
-              "$PACKAGE_PATH.sha256sum" \
-              --clobber
+            if [[ "$(gh release view "$VERSION" --json isDraft --jq '.isDraft')" == "true" ]]; then
+              gh release edit "$VERSION" \
+                --title "$VERSION" \
+                --notes-file "$RUNNER_TEMP/release-notes.md" \
+                --prerelease=false
+              gh release upload "$VERSION" \
+                "$PACKAGE_PATH" \
+                "$PACKAGE_PATH.md5sum" \
+                "$PACKAGE_PATH.sha256sum" \
+                --clobber
+            else
+              echo "Release $VERSION is already published; preserving its assets."
+            fi
           else
             gh release create "$VERSION" \
               "$PACKAGE_PATH" \
               "$PACKAGE_PATH.md5sum" \
               "$PACKAGE_PATH.sha256sum" \
+              --draft \
               --verify-tag \
               --title "$VERSION" \
               --notes-file "$RUNNER_TEMP/release-notes.md"
           fi
+
+          if [[ "$(gh release view "$VERSION" --json isDraft --jq '.isDraft')" == "true" ]]; then
+            gh release edit "$VERSION" --draft=false --prerelease=false
+          fi
+
+          if [[ "$(gh release view "$VERSION" --json isDraft --jq '.isDraft')" != "false" ]]; then
+            echo "Release $VERSION was not published." >&2
+            exit 1
+          fi
+
+          release_url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}"
+          published_package="$RUNNER_TEMP/$PACKAGE_NAME"
+          published_md5="$RUNNER_TEMP/$PACKAGE_NAME.md5sum"
+
+          curl --fail --location --retry 6 --retry-all-errors --retry-delay 2 \
+            --output "$published_package" "$release_url/$PACKAGE_NAME"
+          curl --fail --location --retry 6 --retry-all-errors --retry-delay 2 \
+            --output "$published_md5" "$release_url/$PACKAGE_NAME.md5sum"
+
+          expected_md5="$(awk '{ print $1; exit }' "$published_md5")"
+          echo "$expected_md5  $published_package" | md5sum --check --strict -
 
       - name: Update plugin manifest
         env:
