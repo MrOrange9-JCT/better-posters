@@ -6,7 +6,16 @@
         "overview": "Fetch configurable Better Posters images from btttr.cc",
         "owner": "Neureka",
         "category": "MoviesAndShows",
+        "imageUrl": "https://raw.githubusercontent.com/neurekadev/better-posters/master/Assets/Catalog.png",
         "versions": [
+            {
+                "version": "1.0.5.0",
+                "changelog": "### Changed\n- Move Better Posters updates to the official GitHub project; replace the old Jellyfin update source and reinstall the plugin to keep receiving releases.\n",
+                "targetAbi": "10.11.10.0",
+                "sourceUrl": "https://github.com/neurekadev/better-posters/releases/download/1.0.5/better-posters_1.0.5.0.zip",
+                "checksum": "aee5549501acf7eadb7342e7b399bab5",
+                "timestamp": "2026-08-26T03:41:05Z"
+            },
             {
                 "version": "1.0.4.0",
                 "changelog": "### Changed\n- Moved the plugin repository to a new home. Reinstall Better Posters with the updated repository URL to keep receiving updates.\n",
@@ -15,7 +24,6 @@
                 "checksum": "5b5aa525deac0a744ffd583ba09d1e0b",
                 "timestamp": "2026-07-10T18:57:53Z"
             }
-        ],
-        "imageUrl": "https://code.neureka.dev/jellyfin/plugins/better-posters/-/raw/master/Assets/Catalog.png"
+        ]
     }
 ]
