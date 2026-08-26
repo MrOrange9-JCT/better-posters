@@ -168,6 +168,7 @@ jobs:
                 owner,
                 repo,
                 release_id: release.id,
+                tag_name: version,
                 name: version,
                 body: notes,
                 draft: true,
@@ -237,6 +238,7 @@ jobs:
                 owner,
                 repo,
                 release_id: release.id,
+                tag_name: version,
                 name: version,
                 body: notes,
                 draft: false,
@@ -283,9 +285,6 @@ jobs:
               sort --version-sort |
               tail --lines 1
           )"
-          if [[ "$VERSION" == "$latest_version" ]]; then
-            gh release edit "$VERSION" --latest
-          fi
 
           release_url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}"
           published_package="$RUNNER_TEMP/$PACKAGE_NAME"
