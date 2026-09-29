@@ -59,9 +59,14 @@ public enum PosterLanguage
     English,
 
     /// <summary>
-    /// Spanish posters.
+    /// Spanish posters (Spain).
     /// </summary>
     Spanish,
+
+    /// <summary>
+    /// Spanish posters (Mexico).
+    /// </summary>
+    SpanishMexico,
 
     /// <summary>
     /// French posters.
