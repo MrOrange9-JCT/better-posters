@@ -71,7 +71,8 @@ public static class BetterPosterUrlBuilder
         return language switch
         {
             PosterLanguage.English => null,
-            PosterLanguage.Spanish => "es",
+            PosterLanguage.Spanish => "es-ES",
+            PosterLanguage.SpanishMexico => "es-MX",
             PosterLanguage.French => "fr",
             PosterLanguage.German => "de",
             PosterLanguage.PortugueseBrazil => "pt-BR",

@@ -29,7 +29,7 @@
 - **Movies and Shows:** Registers as a remote primary image provider for movie and series items.
 - **Configurable Poster Overlays:** Toggle trend tags, quality badges, genre, rating, and age rating.
 - **Rating Source Selection:** Use btttr.cc average ratings or choose IMDb, TMDB, Rotten Tomatoes, Metacritic, Trakt, Letterboxd, or Roger Ebert.
-- **Multi-Language Posters:** Select English, Spanish, French, German, Portuguese, Italian, Dutch, Polish, Russian, Turkish, Arabic, Japanese, Korean, Chinese, Hindi, Swedish, or Czech.
+- **Multi-Language Posters:** Select English, Spanish (Spain), Spanish (Mexico), French, German, Portuguese (Brazil), Portuguese (Portugal), Italian, Dutch, Polish, Russian, Turkish, Arabic, Japanese, Korean, Chinese, Hindi, Swedish, or Czech.
 - **Scheduled Replacement:** Optionally replace existing movie and show posters through Jellyfin Scheduled Tasks.
 
 ## Installation Guide

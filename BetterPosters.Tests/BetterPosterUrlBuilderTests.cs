@@ -68,7 +68,8 @@ public class BetterPosterUrlBuilderTests
     }
 
     [Theory]
-    [InlineData(PosterLanguage.Spanish, "es")]
+    [InlineData(PosterLanguage.Spanish, "es-ES")]
+    [InlineData(PosterLanguage.SpanishMexico, "es-MX")]
     [InlineData(PosterLanguage.French, "fr")]
     [InlineData(PosterLanguage.German, "de")]
     [InlineData(PosterLanguage.PortugueseBrazil, "pt-BR")]
