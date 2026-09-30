@@ -12,9 +12,9 @@
                 "version": "1.0.5.0",
                 "changelog": "### Changed\n- Move Better Posters updates to the official GitHub project; replace the old Jellyfin update source and reinstall the plugin to keep receiving releases.\n",
                 "targetAbi": "10.11.10.0",
-                "sourceUrl": "https://github.com/MrOrange9-JCT/better-posters/releases/download/1.0.5/better-posters_1.0.5.0.zip",
-                "checksum": "1238c0fd08fd2cf97e84c393cedfe36c",
-                "timestamp": "2026-09-29T16:23:30Z"
+                "sourceUrl": "https://raw.githubusercontent.com/MrOrange9-JCT/better-posters/master/releases/better-posters_1.0.5.0.zip",
+                "checksum": "43f478777efd92bec7f3cf8db0cf4b4f",
+                "timestamp": "2026-09-30T17:06:00Z"
             },
             {
                 "version": "1.0.4.0",
